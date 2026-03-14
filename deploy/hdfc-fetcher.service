@@ -1,0 +1,15 @@
+[Unit]
+Description=HDFC Expense Tracker — Email Fetcher
+After=network.target hdfc-bot.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/hdfc-expense-bot
+EnvironmentFile=/opt/hdfc-expense-bot/.env
+ExecStart=/opt/hdfc-expense-bot/venv/bin/python email_fetcher.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
