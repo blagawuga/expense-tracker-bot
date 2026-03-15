@@ -121,6 +121,12 @@ def fetch_and_save():
                 if not body:
                     continue
 
+                # Dedup before calling LLM — fingerprint is a pure hash of the body
+                fp = txn_fingerprint(body)
+                if fingerprint_exists(c, fp):
+                    logger.debug(f"Duplicate skipped: {subject[:60]}")
+                    continue
+
                 result = parse_hdfc_email(body)
                 if not result:
                     logger.debug(f"Could not parse: {subject[:60]}")
@@ -129,12 +135,6 @@ def fetch_and_save():
                 # Always use the email Date: header as ground truth
                 if email_date:
                     result["txn_date"] = email_date
-
-                fp = txn_fingerprint(body)
-
-                if fingerprint_exists(c, fp):
-                    logger.debug(f"Duplicate skipped: {subject[:60]}")
-                    continue
 
                 # Secondary dedup by ref_no (strongest signal)
                 if result.get("ref_no"):
