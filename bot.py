@@ -11,12 +11,15 @@ Setup:
   4. python bot.py
 """
 
+import json
 import os
 import re
 import sqlite3
 import logging
+import threading
 from datetime import datetime, timedelta
 from io import BytesIO
+from functools import wraps
 
 import matplotlib
 matplotlib.use("Agg")
@@ -24,7 +27,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import pandas as pd
 
-from telegram import Update, BotCommand
+from telegram import Update
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, MessageHandler,
     ContextTypes, filters
@@ -46,7 +49,6 @@ logger = logging.getLogger(__name__)
 # ──────────────────────────────────────────────────────────────
 # AUTH
 # ──────────────────────────────────────────────────────────────
-from functools import wraps
 
 def restricted(func):
     @wraps(func)
@@ -234,8 +236,6 @@ def auto_categorize(cursor, user_id, merchant):
 #     LLM_PROVIDER=groq  (email fetcher on Oracle Cloud)
 # ──────────────────────────────────────────────────────────────
 
-import json
-
 LLM_PROVIDER   = os.environ.get("LLM_PROVIDER", "groq")   # "ollama" or "groq"
 OLLAMA_HOST    = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 OLLAMA_MODEL   = os.environ.get("OLLAMA_MODEL", "llama3.2:3b")
@@ -292,7 +292,6 @@ def _call_ollama(email_snippet: str) -> str:
     return response.json()["message"]["content"]
 
 
-import threading
 _groq_local = threading.local()
 
 def _get_groq_client():

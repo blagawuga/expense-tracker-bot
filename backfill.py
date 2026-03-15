@@ -386,7 +386,7 @@ def backfill(args):
     print("  " + "─" * 53)
     if args.dry_run:
         print(f"  Would import:               {stats['would_import']:>8,}")
-        print(f"  (re-run without --dry-run to actually import)")
+        print("  (re-run without --dry-run to actually import)")
     else:
         print(f"  ✅ Imported:                 {stats['imported']:>8,}")
     print(f"  Time elapsed:               {elapsed:>7.1f}s")
@@ -409,11 +409,11 @@ def backfill(args):
         conn.close()
 
         if row and row[0]:
-            print(f"\n  📊 Your expense data now spans:")
+            print("\n  📊 Your expense data now spans:")
             print(f"     {row[0]}  →  {row[1]}")
             print(f"     {row[2]:,} transactions totalling ₹{row[3]:,.2f}")
             print(f"     across {row[4]} categories")
-            print(f"\n  Start the bot and use /summary or /monthly to explore!")
+            print("\n  Start the bot and use /summary or /monthly to explore!")
 
 
 # ──────────────────────────────────────────────────────────────
