@@ -1,0 +1,23 @@
+services:
+  bot:
+    build: .
+    environment:
+      - SERVICE=bot
+    env_file: .env
+    volumes:
+      - db_data:/data
+    restart: unless-stopped
+
+  fetcher:
+    build: .
+    environment:
+      - SERVICE=fetcher
+    env_file: .env
+    volumes:
+      - db_data:/data
+    restart: unless-stopped
+    depends_on:
+      - bot
+
+volumes:
+  db_data:

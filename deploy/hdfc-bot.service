@@ -1,0 +1,15 @@
+[Unit]
+Description=HDFC Expense Tracker — Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/hdfc-expense-bot
+EnvironmentFile=/opt/hdfc-expense-bot/.env
+ExecStart=/opt/hdfc-expense-bot/venv/bin/python bot.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
